@@ -25784,19 +25784,44 @@
 	var data = __webpack_require__(224);
 	var ShowCard = __webpack_require__(225);
 
-	var Search = function Search() {
-	  return React.createElement(
-	    'div',
-	    { className: 'container' },
-	    React.createElement(
+	var Search = React.createClass({
+	  displayName: 'Search',
+	  getInitialState: function getInitialState() {
+	    return {
+	      searchTerm: ''
+	    };
+	  },
+	  handleSearchTermEvent: function handleSearchTermEvent(event) {
+	    this.setState({ searchTerm: event.target.value });
+	  },
+	  render: function render() {
+	    var _this = this;
+
+	    return React.createElement(
 	      'div',
-	      { className: 'shows' },
-	      data.shows.map(function (show) {
-	        return React.createElement(ShowCard, _extends({}, show, { key: show.imdbID }));
-	      })
-	    )
-	  );
-	};
+	      { className: 'container' },
+	      React.createElement(
+	        'header',
+	        { className: 'header' },
+	        React.createElement(
+	          'h1',
+	          { className: 'brand' },
+	          'svideo'
+	        ),
+	        React.createElement('input', { onChange: this.handleSearchTermEvent, value: this.state.searchTerm, className: 'search-input', type: 'text', placeholder: 'Search...' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'shows' },
+	        data.shows.filter(function (show) {
+	          return (show.title + ' ' + show.description).toUpperCase().indexOf(_this.state.searchTerm.toUpperCase()) >= 0;
+	        }).map(function (show) {
+	          return React.createElement(ShowCard, _extends({}, show, { key: show.imdbID }));
+	        })
+	      )
+	    );
+	  }
+	});
 
 	module.exports = Search;
 
