@@ -11,7 +11,7 @@ const App = React.createClass({
   assignShow (nextState, replace) {
     const showArray = shows.filter((show) => show.imdbID === nextState.params.id)
 
-    //console.log('nextState', nextState, 'showArray', showArray)
+    // console.log('nextState', nextState, 'showArray', showArray)
 
     if (showArray.length < 1) {
       return replace('/')

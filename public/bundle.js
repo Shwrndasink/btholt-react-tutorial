@@ -50,8 +50,8 @@
 	var ReactDOM = __webpack_require__(158);
 	var Landing = __webpack_require__(159);
 	var Search = __webpack_require__(223);
-	var Layout = __webpack_require__(225);
-	var Details = __webpack_require__(226);
+	var Layout = __webpack_require__(226);
+	var Details = __webpack_require__(227);
 
 	var _require = __webpack_require__(160);
 
@@ -60,7 +60,7 @@
 	var IndexRoute = _require.IndexRoute;
 	var hashHistory = _require.hashHistory;
 
-	var _require2 = __webpack_require__(227);
+	var _require2 = __webpack_require__(228);
 
 	var shows = _require2.shows;
 
@@ -72,7 +72,7 @@
 	      return show.imdbID === nextState.params.id;
 	    });
 
-	    console.log('nextState', nextState, 'showArray', showArray);
+	    // console.log('nextState', nextState, 'showArray', showArray)
 
 	    if (showArray.length < 1) {
 	      return replace('/');
@@ -25806,6 +25806,7 @@
 	var ShowCard = __webpack_require__(224);
 	var object = React.PropTypes.object;
 
+	var Header = __webpack_require__(225);
 
 	var Search = React.createClass({
 	  displayName: 'Search',
@@ -25820,8 +25821,8 @@
 	    route: object,
 	    shows: object
 	  },
-	  handleSearchTermEvent: function handleSearchTermEvent(event) {
-	    this.setState({ searchTerm: event.target.value });
+	  handleSearchTermChange: function handleSearchTermChange(searchTerm) {
+	    this.setState({ searchTerm: searchTerm });
 	  },
 	  render: function render() {
 	    var _this = this;
@@ -25829,16 +25830,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'container' },
-	      React.createElement(
-	        'header',
-	        { className: 'header' },
-	        React.createElement(
-	          'h1',
-	          { className: 'brand' },
-	          'svideo'
-	        ),
-	        React.createElement('input', { onChange: this.handleSearchTermEvent, value: this.state.searchTerm, className: 'search-input', type: 'text', placeholder: 'Search...' })
-	      ),
+	      React.createElement(Header, { handleSearchTermChange: this.handleSearchTermChange, searchTerm: this.state.searchTerm, showSearch: true }),
 	      React.createElement(
 	        'div',
 	        { className: 'shows' },
@@ -25911,6 +25903,68 @@
 
 	var React = __webpack_require__(1);
 
+	var _require = __webpack_require__(160);
+
+	var Link = _require.Link;
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var bool = _React$PropTypes.bool;
+	var string = _React$PropTypes.string;
+
+
+	var Header = React.createClass({
+	  displayName: 'Header',
+
+	  propTypes: {
+	    handleSearchTermChange: func,
+	    showSearch: bool,
+	    searchTerm: string
+	  },
+	  handleSearchTermEvent: function handleSearchTermEvent(e) {
+	    this.props.handleSearchTermChange(e.target.value);
+	  },
+	  render: function render() {
+	    var utilSpace = void 0;
+	    if (this.props.showSearch) {
+	      utilSpace = React.createElement('input', { type: 'text', className: 'search-input', placeholder: 'search', value: this.props.searchTerm, onChange: this.handleSearchTermEvent });
+	    } else {
+	      utilSpace = React.createElement(
+	        'h2',
+	        { className: 'header-back' },
+	        React.createElement(
+	          Link,
+	          { to: '/search' },
+	          'Back'
+	        )
+	      );
+	    }
+	    return React.createElement(
+	      'header',
+	      { className: 'header' },
+	      React.createElement(
+	        'h1',
+	        { className: 'brand' },
+	        React.createElement(
+	          Link,
+	          { to: '/', className: 'brand-link' },
+	          'svideo'
+	        )
+	      ),
+	      utilSpace
+	    );
+	  }
+	});
+
+	module.exports = Header;
+
+/***/ },
+/* 226 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
 	var Layout = function Layout(props) {
 	  return React.createElement(
 	    'div',
@@ -25929,7 +25983,7 @@
 	module.exports = Layout;
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25943,6 +25997,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(1);
+	var Header = __webpack_require__(225);
 
 	var Details = function (_React$Component) {
 	  _inherits(Details, _React$Component);
@@ -25956,17 +26011,43 @@
 	  _createClass(Details, [{
 	    key: 'render',
 	    value: function render() {
+	      var params = this.props.params || {};
+	      var title = params.title;
+	      var description = params.description;
+	      var year = params.year;
+	      var poster = params.poster;
+	      var trailer = params.trailer;
+
 	      return React.createElement(
 	        'div',
 	        { className: 'container' },
+	        React.createElement(Header, null),
 	        React.createElement(
-	          'pre',
-	          null,
+	          'div',
+	          { className: 'video-info' },
 	          React.createElement(
-	            'code',
-	            null,
-	            JSON.stringify(this.props.params, null, 4)
+	            'h1',
+	            { className: 'video-title' },
+	            title
+	          ),
+	          React.createElement(
+	            'h2',
+	            { className: 'video-year' },
+	            '(',
+	            year,
+	            ')'
+	          ),
+	          React.createElement('img', { className: 'video-poster', src: 'public/img/posters/' + poster }),
+	          React.createElement(
+	            'p',
+	            { className: 'video-description' },
+	            description
 	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'video-container' },
+	          React.createElement('iframe', { src: 'https://www.youtube-nocookie.com/embed/' + trailer + '?rel=0&amp;controls=0&amp;showinfo=0', frameBorder: '0', allowFullScreen: true })
 	        )
 	      );
 	    }
@@ -25979,13 +26060,13 @@
 
 
 	Details.propTypes = {
-	  params: object
+	  params: object.isRequired
 	};
 
 	module.exports = Details;
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports) {
 
 	module.exports = {
