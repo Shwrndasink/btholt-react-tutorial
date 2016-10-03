@@ -49,7 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 	var Landing = __webpack_require__(159);
-	var Search = __webpack_require__(223);
+	var Search = __webpack_require__(244);
 	var Layout = __webpack_require__(247);
 	var Details = __webpack_require__(248);
 
@@ -64,11 +64,11 @@
 
 	var shows = _require2.shows;
 
-	var _require3 = __webpack_require__(226);
+	var _require3 = __webpack_require__(223);
 
 	var store = _require3.store;
 
-	var _require4 = __webpack_require__(240);
+	var _require4 = __webpack_require__(237);
 
 	var Provider = _require4.Provider;
 
@@ -19858,32 +19858,88 @@
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var React = __webpack_require__(1);
 
 	var _require = __webpack_require__(160);
 
 	var Link = _require.Link;
+	var hashHistory = _require.hashHistory;
+
+	var _require2 = __webpack_require__(223);
+
+	var connector = _require2.connector;
+
+	var Landing = function (_React$Component) {
+	  _inherits(Landing, _React$Component);
+
+	  function Landing(props) {
+	    _classCallCheck(this, Landing);
+
+	    var _this = _possibleConstructorReturn(this, (Landing.__proto__ || Object.getPrototypeOf(Landing)).call(this, props));
+
+	    _this.handleSearchTermEvent = _this.handleSearchTermEvent.bind(_this);
+	    _this.gotoSearch = _this.gotoSearch.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Landing, [{
+	    key: 'handleSearchTermEvent',
+	    value: function handleSearchTermEvent(event) {
+	      this.props.setSearchTerm(event.target.value);
+	    }
+	  }, {
+	    key: 'gotoSearch',
+	    value: function gotoSearch(event) {
+	      hashHistory.push('search');
+	      event.preventDefault();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return React.createElement(
+	        'div',
+	        { className: 'home-info' },
+	        React.createElement(
+	          'h1',
+	          { className: 'title' },
+	          'svideo is awesome'
+	        ),
+	        React.createElement(
+	          'form',
+	          { onSubmit: this.gotoSearch },
+	          React.createElement('input', { value: this.props.searchTerm, onChange: this.handleSearchTermEvent, className: 'search', type: 'text', placeholder: 'Search' })
+	        ),
+	        React.createElement(
+	          Link,
+	          { to: '/search', className: 'browse-all' },
+	          ' or Browse All'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Landing;
+	}(React.Component);
+
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var string = _React$PropTypes.string;
 
 
-	var Landing = function Landing() {
-	  return React.createElement(
-	    'div',
-	    { className: 'home-info' },
-	    React.createElement(
-	      'h1',
-	      { className: 'title' },
-	      'svideo is awesome'
-	    ),
-	    React.createElement('input', { className: 'search', type: 'text', placeholder: 'Search' }),
-	    React.createElement(
-	      Link,
-	      { to: '/search', className: 'browse-all' },
-	      ' or Browse All'
-	    )
-	  );
+	Landing.propTypes = {
+	  searchTerm: string,
+	  setSearchTerm: func
 	};
 
-	module.exports = Landing;
+	module.exports = connector(Landing);
 
 /***/ },
 /* 160 */
@@ -25812,175 +25868,8 @@
 
 	'use strict';
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var React = __webpack_require__(1);
-	var ShowCard = __webpack_require__(224);
-	var _React$PropTypes = React.PropTypes;
-	var object = _React$PropTypes.object;
-	var string = _React$PropTypes.string;
-
-	var Header = __webpack_require__(225);
-
-	var _require = __webpack_require__(226);
-
-	var connector = _require.connector;
-
-
-	var Search = React.createClass({
-	  displayName: 'Search',
-
-	  propTypes: {
-	    route: object,
-	    shows: object,
-	    searchTerm: string
-	  },
-	  render: function render() {
-	    var _this = this;
-
-	    return React.createElement(
-	      'div',
-	      { className: 'container' },
-	      React.createElement(Header, { showSearch: true }),
-	      React.createElement(
-	        'div',
-	        { className: 'shows' },
-	        this.props.route.shows.filter(function (show) {
-	          return (show.title + ' ' + show.description).toUpperCase().indexOf(_this.props.searchTerm.toUpperCase()) >= 0;
-	        }).map(function (show) {
-	          return React.createElement(ShowCard, _extends({}, show, { key: show.imdbID }));
-	        })
-	      )
-	    );
-	  }
-	});
-
-	module.exports = connector(Search);
-
-/***/ },
-/* 224 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var ShowCard = function ShowCard(props) {
-	  return React.createElement(
-	    'div',
-	    { className: 'show-card' },
-	    React.createElement('img', { src: 'public/img/posters/' + props.poster, className: 'show-card-img' }),
-	    React.createElement(
-	      'div',
-	      { className: 'show-card-text' },
-	      React.createElement(
-	        'h3',
-	        { className: 'show-card-title' },
-	        props.title
-	      ),
-	      React.createElement(
-	        'h4',
-	        { className: 'show-card-year' },
-	        '(',
-	        props.year,
-	        ')'
-	      ),
-	      React.createElement(
-	        'p',
-	        { className: 'show-card-description' },
-	        props.description
-	      )
-	    )
-	  );
-	};
-
-	var string = React.PropTypes.string;
-
-
-	ShowCard.propTypes = {
-	  title: string.isRequired,
-	  description: string.isRequired,
-	  year: string.isRequired,
-	  poster: string.isRequired
-	};
-
-	module.exports = ShowCard;
-
-/***/ },
-/* 225 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(160);
-
-	var Link = _require.Link;
-	var _React$PropTypes = React.PropTypes;
-	var func = _React$PropTypes.func;
-	var bool = _React$PropTypes.bool;
-	var string = _React$PropTypes.string;
-
-	var _require2 = __webpack_require__(226);
-
-	var connector = _require2.connector;
-
-
-	var Header = React.createClass({
-	  displayName: 'Header',
-
-	  propTypes: {
-	    setSearchTerm: func,
-	    showSearch: bool,
-	    searchTerm: string
-	  },
-	  handleSearchTermEvent: function handleSearchTermEvent(e) {
-	    this.props.setSearchTerm(e.target.value);
-	  },
-	  render: function render() {
-	    console.log(this.props.searchTerm);
-	    var utilSpace = void 0;
-	    if (this.props.showSearch) {
-	      utilSpace = React.createElement('input', { type: 'text', className: 'search-input', placeholder: 'search', value: this.props.searchTerm, onChange: this.handleSearchTermEvent });
-	    } else {
-	      utilSpace = React.createElement(
-	        'h2',
-	        { className: 'header-back' },
-	        React.createElement(
-	          Link,
-	          { to: '/search' },
-	          'Back'
-	        )
-	      );
-	    }
-	    return React.createElement(
-	      'header',
-	      { className: 'header' },
-	      React.createElement(
-	        'h1',
-	        { className: 'brand' },
-	        React.createElement(
-	          Link,
-	          { to: '/', className: 'brand-link' },
-	          'svideo'
-	        )
-	      ),
-	      utilSpace
-	    );
-	  }
-	});
-
-	module.exports = connector(Header);
-
-/***/ },
-/* 226 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var redux = __webpack_require__(227);
-	var reactRedux = __webpack_require__(240);
+	var redux = __webpack_require__(224);
+	var reactRedux = __webpack_require__(237);
 
 	var SET_SEARCH_TERM = 'setSearchTerm';
 	var initialState = {
@@ -26024,7 +25913,7 @@
 	module.exports = { connector: connector, store: store };
 
 /***/ },
-/* 227 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -26032,27 +25921,27 @@
 	exports.__esModule = true;
 	exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 
-	var _createStore = __webpack_require__(228);
+	var _createStore = __webpack_require__(225);
 
 	var _createStore2 = _interopRequireDefault(_createStore);
 
-	var _combineReducers = __webpack_require__(235);
+	var _combineReducers = __webpack_require__(232);
 
 	var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-	var _bindActionCreators = __webpack_require__(237);
+	var _bindActionCreators = __webpack_require__(234);
 
 	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-	var _applyMiddleware = __webpack_require__(238);
+	var _applyMiddleware = __webpack_require__(235);
 
 	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-	var _compose = __webpack_require__(239);
+	var _compose = __webpack_require__(236);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
-	var _warning = __webpack_require__(236);
+	var _warning = __webpack_require__(233);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -26078,7 +25967,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 228 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26089,11 +25978,11 @@
 	exports.ActionTypes = undefined;
 	exports['default'] = createStore;
 
-	var _isPlainObject = __webpack_require__(229);
+	var _isPlainObject = __webpack_require__(226);
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _symbolObservable = __webpack_require__(232);
+	var _symbolObservable = __webpack_require__(229);
 
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -26348,13 +26237,13 @@
 	}
 
 /***/ },
-/* 229 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isHostObject = __webpack_require__(230),
-	    isObjectLike = __webpack_require__(231);
+	var isHostObject = __webpack_require__(227),
+	    isObjectLike = __webpack_require__(228);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -26419,7 +26308,7 @@
 	module.exports = isPlainObject;
 
 /***/ },
-/* 230 */
+/* 227 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26446,7 +26335,7 @@
 	module.exports = isHostObject;
 
 /***/ },
-/* 231 */
+/* 228 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26483,15 +26372,15 @@
 	module.exports = isObjectLike;
 
 /***/ },
-/* 232 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(233);
+	module.exports = __webpack_require__(230);
 
 /***/ },
-/* 233 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -26500,7 +26389,7 @@
 		value: true
 	});
 
-	var _ponyfill = __webpack_require__(234);
+	var _ponyfill = __webpack_require__(231);
 
 	var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -26521,7 +26410,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 234 */
+/* 231 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26549,7 +26438,7 @@
 	};
 
 /***/ },
-/* 235 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -26557,13 +26446,13 @@
 	exports.__esModule = true;
 	exports['default'] = combineReducers;
 
-	var _createStore = __webpack_require__(228);
+	var _createStore = __webpack_require__(225);
 
-	var _isPlainObject = __webpack_require__(229);
+	var _isPlainObject = __webpack_require__(226);
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _warning = __webpack_require__(236);
+	var _warning = __webpack_require__(233);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -26699,7 +26588,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 236 */
+/* 233 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26729,7 +26618,7 @@
 	}
 
 /***/ },
-/* 237 */
+/* 234 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26787,7 +26676,7 @@
 	}
 
 /***/ },
-/* 238 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26806,7 +26695,7 @@
 
 	exports['default'] = applyMiddleware;
 
-	var _compose = __webpack_require__(239);
+	var _compose = __webpack_require__(236);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
@@ -26860,7 +26749,7 @@
 	}
 
 /***/ },
-/* 239 */
+/* 236 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26903,7 +26792,7 @@
 	}
 
 /***/ },
-/* 240 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26911,11 +26800,11 @@
 	exports.__esModule = true;
 	exports.connect = exports.Provider = undefined;
 
-	var _Provider = __webpack_require__(241);
+	var _Provider = __webpack_require__(238);
 
 	var _Provider2 = _interopRequireDefault(_Provider);
 
-	var _connect = __webpack_require__(244);
+	var _connect = __webpack_require__(241);
 
 	var _connect2 = _interopRequireDefault(_connect);
 
@@ -26927,7 +26816,7 @@
 	exports.connect = _connect2["default"];
 
 /***/ },
-/* 241 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -26939,11 +26828,11 @@
 
 	var _react = __webpack_require__(1);
 
-	var _storeShape = __webpack_require__(242);
+	var _storeShape = __webpack_require__(239);
 
 	var _storeShape2 = _interopRequireDefault(_storeShape);
 
-	var _warning = __webpack_require__(243);
+	var _warning = __webpack_require__(240);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -27027,7 +26916,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 242 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27043,7 +26932,7 @@
 	});
 
 /***/ },
-/* 243 */
+/* 240 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27072,7 +26961,7 @@
 	}
 
 /***/ },
-/* 244 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -27094,23 +26983,23 @@
 
 	var _react = __webpack_require__(1);
 
-	var _storeShape = __webpack_require__(242);
+	var _storeShape = __webpack_require__(239);
 
 	var _storeShape2 = _interopRequireDefault(_storeShape);
 
-	var _shallowEqual = __webpack_require__(245);
+	var _shallowEqual = __webpack_require__(242);
 
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
-	var _wrapActionCreators = __webpack_require__(246);
+	var _wrapActionCreators = __webpack_require__(243);
 
 	var _wrapActionCreators2 = _interopRequireDefault(_wrapActionCreators);
 
-	var _warning = __webpack_require__(243);
+	var _warning = __webpack_require__(240);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _isPlainObject = __webpack_require__(229);
+	var _isPlainObject = __webpack_require__(226);
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
@@ -27495,7 +27384,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 245 */
+/* 242 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -27526,7 +27415,7 @@
 	}
 
 /***/ },
-/* 246 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27534,13 +27423,190 @@
 	exports.__esModule = true;
 	exports["default"] = wrapActionCreators;
 
-	var _redux = __webpack_require__(227);
+	var _redux = __webpack_require__(224);
 
 	function wrapActionCreators(actionCreators) {
 	  return function (dispatch) {
 	    return (0, _redux.bindActionCreators)(actionCreators, dispatch);
 	  };
 	}
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var React = __webpack_require__(1);
+	var ShowCard = __webpack_require__(245);
+	var _React$PropTypes = React.PropTypes;
+	var object = _React$PropTypes.object;
+	var string = _React$PropTypes.string;
+
+	var Header = __webpack_require__(246);
+
+	var _require = __webpack_require__(223);
+
+	var connector = _require.connector;
+
+
+	var Search = React.createClass({
+	  displayName: 'Search',
+
+	  propTypes: {
+	    route: object,
+	    shows: object,
+	    searchTerm: string
+	  },
+	  render: function render() {
+	    var _this = this;
+
+	    return React.createElement(
+	      'div',
+	      { className: 'container' },
+	      React.createElement(Header, { showSearch: true }),
+	      React.createElement(
+	        'div',
+	        { className: 'shows' },
+	        this.props.route.shows.filter(function (show) {
+	          return (show.title + ' ' + show.description).toUpperCase().indexOf(_this.props.searchTerm.toUpperCase()) >= 0;
+	        }).map(function (show) {
+	          return React.createElement(ShowCard, _extends({}, show, { key: show.imdbID }));
+	        })
+	      )
+	    );
+	  }
+	});
+
+	module.exports = connector(Search);
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(160);
+
+	var Link = _require.Link;
+
+
+	var ShowCard = function ShowCard(props) {
+	  return React.createElement(
+	    Link,
+	    { to: '/details/' + props.imdbID },
+	    React.createElement(
+	      'div',
+	      { className: 'show-card' },
+	      React.createElement('img', { src: 'public/img/posters/' + props.poster, className: 'show-card-img' }),
+	      React.createElement(
+	        'div',
+	        { className: 'show-card-text' },
+	        React.createElement(
+	          'h3',
+	          { className: 'show-card-title' },
+	          props.title
+	        ),
+	        React.createElement(
+	          'h4',
+	          { className: 'show-card-year' },
+	          '(',
+	          props.year,
+	          ')'
+	        ),
+	        React.createElement(
+	          'p',
+	          { className: 'show-card-description' },
+	          props.description
+	        )
+	      )
+	    )
+	  );
+	};
+
+	var string = React.PropTypes.string;
+
+
+	ShowCard.propTypes = {
+	  title: string.isRequired,
+	  description: string.isRequired,
+	  year: string.isRequired,
+	  poster: string.isRequired,
+	  imdbID: string.isRequired
+	};
+
+	module.exports = ShowCard;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(160);
+
+	var Link = _require.Link;
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var bool = _React$PropTypes.bool;
+	var string = _React$PropTypes.string;
+
+	var _require2 = __webpack_require__(223);
+
+	var connector = _require2.connector;
+
+
+	var Header = React.createClass({
+	  displayName: 'Header',
+
+	  propTypes: {
+	    setSearchTerm: func,
+	    showSearch: bool,
+	    searchTerm: string
+	  },
+	  handleSearchTermEvent: function handleSearchTermEvent(e) {
+	    this.props.setSearchTerm(e.target.value);
+	  },
+	  render: function render() {
+	    console.log(this.props.searchTerm);
+	    var utilSpace = void 0;
+	    if (this.props.showSearch) {
+	      utilSpace = React.createElement('input', { type: 'text', className: 'search-input', placeholder: 'search', value: this.props.searchTerm, onChange: this.handleSearchTermEvent });
+	    } else {
+	      utilSpace = React.createElement(
+	        'h2',
+	        { className: 'header-back' },
+	        React.createElement(
+	          Link,
+	          { to: '/search' },
+	          'Back'
+	        )
+	      );
+	    }
+	    return React.createElement(
+	      'header',
+	      { className: 'header' },
+	      React.createElement(
+	        'h1',
+	        { className: 'brand' },
+	        React.createElement(
+	          Link,
+	          { to: '/', className: 'brand-link' },
+	          'svideo'
+	        )
+	      ),
+	      utilSpace
+	    );
+	  }
+	});
+
+	module.exports = connector(Header);
 
 /***/ },
 /* 247 */
@@ -27582,7 +27648,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(1);
-	var Header = __webpack_require__(225);
+	var Header = __webpack_require__(246);
 
 	var Details = function (_React$Component) {
 	  _inherits(Details, _React$Component);
