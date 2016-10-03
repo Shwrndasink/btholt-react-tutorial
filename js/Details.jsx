@@ -4,7 +4,7 @@ const { connector } = require('./Store')
 
 class Details extends React.Component {
   assignShow (id) {
-    const showArray = this.porps.shows.filter((show) => show.imdbID === id)
+    const showArray = this.props.shows.filter((show) => show.imdbID === id)
     return showArray[0]
   }
   render () {
@@ -15,7 +15,7 @@ class Details extends React.Component {
         <div className="video-info">
           <h1 className="video-title">{title}</h1>
           <h2 className="video-year">({year})</h2>
-          <img className="video-poster" src={`public/img/posters/${poster}`} />
+          <img className="video-poster" src={`/public/img/posters/${poster}`} />
           <p className="video-description">{description}</p>
         </div>
         <div className="video-container">
